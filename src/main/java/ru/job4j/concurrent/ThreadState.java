@@ -13,14 +13,12 @@ public class ThreadState {
         System.out.printf("Статус потока: %s = %s%s", first.getName(), first.getState(), System.lineSeparator());
         System.out.printf("Статус потока: %s = %s%s", second.getName(), second.getState(), System.lineSeparator());
         first.start();
-        second.start();
-        try {
+        while (first.getState() != Thread.State.TERMINATED) {
             System.out.printf("Ожидание потока: %s%s", first.getName(), System.lineSeparator());
-            first.join();
+        }
+        second.start();
+        while (second.getState() != Thread.State.TERMINATED) {
             System.out.printf("Ожидание потока: %s%s", second.getName(), System.lineSeparator());
-            second.join();
-        } catch (InterruptedException e) {
-            System.out.println("Поток прерван");
         }
         System.out.printf("Статус потока: %s = %s%s", first.getName(), first.getState(), System.lineSeparator());
         System.out.printf("Статус потока: %s = %s%s", second.getName(), second.getState(), System.lineSeparator());
