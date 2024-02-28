@@ -12,6 +12,7 @@ public class ConsoleProgress implements Runnable {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                    System.out.println("Произошло прерывание в блоке catch");
                 }
             }
         }
