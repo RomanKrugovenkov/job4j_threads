@@ -30,11 +30,11 @@ public class Wget implements Runnable {
                 if (download > speed) {
                     long diffAt = System.currentTimeMillis() - startAt;
                     System.out.println("скачено " + download);
+                    download = 0;
+                    startAt = System.currentTimeMillis();
                     if (diffAt < 1000) {
                         Thread.sleep(1000 - diffAt);
                         System.out.println("Время задержки = " + (1000 - diffAt) + " мс");
-                        download = 0;
-                        startAt = System.currentTimeMillis();
                     }
                 }
                 output.write(dataBuffer, 0, bytesRead);
