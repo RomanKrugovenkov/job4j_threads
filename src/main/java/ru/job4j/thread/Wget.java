@@ -21,7 +21,7 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         try (var input = new URL(url).openStream(); var output = new FileOutputStream(fileName)) {
-            var dataBuffer = new byte[512];
+            var dataBuffer = new byte[1024];
             var startAt = System.currentTimeMillis();
             long download = 0;
             int bytesRead;
@@ -29,10 +29,12 @@ public class Wget implements Runnable {
                 download += bytesRead;
                 if (download > speed) {
                     long diffAt = System.currentTimeMillis() - startAt;
-                    if (diffAt > 1000) {
-                        var sleepTime = 1000000 * download / diffAt / speed;
-                        Thread.sleep(sleepTime);
-                        System.out.println("Время задержки = " + sleepTime + " мс");
+                    System.out.println("скачено " + download);
+                    if (diffAt < 1000) {
+                        Thread.sleep(1000 - diffAt);
+                        System.out.println("Время задержки = " + (1000 - diffAt) + " мс");
+                        download = 0;
+                        startAt = System.currentTimeMillis();
                     }
                 }
                 output.write(dataBuffer, 0, bytesRead);
