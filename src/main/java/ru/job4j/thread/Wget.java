@@ -24,9 +24,11 @@ public class Wget implements Runnable {
             var dataBuffer = new byte[1024];
             var startAt = System.currentTimeMillis();
             long download = 0;
+            long dowloadTotal = 0;
             int bytesRead;
             while ((bytesRead = input.read(dataBuffer, 0, dataBuffer.length)) != -1) {
                 download += bytesRead;
+                dowloadTotal += bytesRead;
                 if (download > speed) {
                     long diffAt = System.currentTimeMillis() - startAt;
                     System.out.println("скачено " + download);
@@ -39,6 +41,7 @@ public class Wget implements Runnable {
                 }
                 output.write(dataBuffer, 0, bytesRead);
             }
+            System.out.println(dowloadTotal);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -68,7 +71,7 @@ public class Wget implements Runnable {
         String fileName = Paths.get(new URL(url).getPath()).getFileName().toString();
         int speed = Integer.parseInt(args[1]);
         Thread wget = new Thread(new Wget(url, fileName, speed));
-        System.out.println("Загрузка файла с ограничением скорости " + speed + " кб/с...");
+        System.out.println("Загрузка файла с ограничением скорости " + speed + " Б/с...");
         wget.start();
         wget.join();
     }
