@@ -48,6 +48,9 @@ public class Wget implements Runnable {
     }
 
     public static void validation(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException(new String("Args is empty"));
+        }
         boolean urlTrue;
         try {
             new URL(args[0]).toURI();
