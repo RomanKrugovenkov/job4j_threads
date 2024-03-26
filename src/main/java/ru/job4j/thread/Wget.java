@@ -74,6 +74,7 @@ public class Wget implements Runnable {
         String fileName = Paths.get(new URL(url).getPath()).getFileName().toString();
         int speed = Integer.parseInt(args[1]);
         Thread wget = new Thread(new Wget(url, fileName, speed));
+        System.out.println("файл " + fileName);
         System.out.println("Загрузка файла с ограничением скорости " + speed + " Б/с...");
         wget.start();
         wget.join();
