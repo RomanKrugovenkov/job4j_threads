@@ -1,12 +1,14 @@
 package ru.job4j.thread;
 
 public class DCLSingleton {
-    private static DCLSingleton instance;
+    private static volatile DCLSingleton instance;
 
     public static DCLSingleton getInstance() {
-        synchronized (DCLSingleton.class) {
-            if (instance == null) {
-                instance = new DCLSingleton();
+        if (instance == null) {
+            synchronized (DCLSingleton.class) {
+                if (instance == null) {
+                    instance = new DCLSingleton();
+                }
             }
         }
         return instance;
