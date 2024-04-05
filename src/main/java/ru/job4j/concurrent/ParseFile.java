@@ -10,18 +10,27 @@ public class ParseFile {
         this.file = file;
     }
 
-    public synchronized String getContentWithPredicate(Predicate filter) {
-        String output = "";
+    private String getContentWithPredicate(Predicate<Integer> filter) {
+        StringBuilder output = new StringBuilder();
         try (InputStream input = new FileInputStream(file)) {
             int data;
             while ((data = input.read()) > 0) {
                 if (filter.test(data)) {
-                    output += (char) data;
+                    output.append(data);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return output;
+        return output.toString();
+    }
+
+    public synchronized String getContentWithoutFilter() {
+        return getContentWithPredicate(f -> true);
+    }
+
+    public synchronized String getContentWithoutUnicode() {
+        Predicate<Integer> filter = i -> i < 0x80;
+        return getContentWithPredicate(filter);
     }
 }
