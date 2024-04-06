@@ -9,10 +9,14 @@ public class Count {
     private int value;
 
     public void increment() {
-        this.value++;
+        synchronized (this) {
+            value++;
+        }
     }
 
     public int get() {
-        return this.value;
+        synchronized (this) {
+            return value;
+        }
     }
 }
