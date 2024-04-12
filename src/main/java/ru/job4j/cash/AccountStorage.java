@@ -11,16 +11,10 @@ public class AccountStorage {
     }
 
     public synchronized boolean update(Account account) {
-        if (getById(account.id()).isEmpty()) {
-            throw new IllegalStateException(String.format("Not found account by id = %d", account.id()));
-        }
         return accounts.put(account.id(), account) != null;
     }
 
     public synchronized void delete(int id) {
-        if (getById(id).isEmpty()) {
-            throw new IllegalStateException(String.format("Not found account by id = %d", id));
-        }
         accounts.remove(id);
     }
 
@@ -29,18 +23,18 @@ public class AccountStorage {
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        if (getById(fromId).isEmpty()) {
+        var accFrom = getById(fromId);
+        var accTo = getById(toId);
+        boolean rsl = false;
+        if (accFrom.isEmpty()) {
             throw new IllegalStateException(String.format("Not found account by id = %d", fromId));
         }
-        if (getById(toId).isEmpty()) {
+        if (accTo.isEmpty()) {
             throw new IllegalStateException(String.format("Not found account by id = %d", toId));
         }
-        boolean rsl = false;
-        Account accFrom = getById(fromId).get();
-        Account accTo = getById(toId).get();
-        if (accFrom.amount() >= amount) {
-            accounts.put(fromId, new Account(fromId, accFrom.amount() - amount));
-            accounts.put(toId, new Account(toId, accTo.amount() + amount));
+        if (accFrom.get().amount() >= amount) {
+            update(new Account(fromId, accFrom.get().amount() - amount));
+            update(new Account(toId, accTo.get().amount() + amount));
             rsl = true;
         }
         return rsl;
