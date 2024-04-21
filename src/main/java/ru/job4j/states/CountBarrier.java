@@ -28,7 +28,6 @@ public class CountBarrier {
                     System.err.println("Thread Interrupted");
                 }
             }
-            monitor.notify();
         }
     }
 }
