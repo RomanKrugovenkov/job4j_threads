@@ -26,10 +26,11 @@ public class ParallelSearch {
                             e.printStackTrace();
                         }
                     }
-                    consumer.interrupt();
                 }
         );
         producer.start();
         consumer.start();
+        producer.join();
+        consumer.interrupt();
     }
 }
