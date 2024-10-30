@@ -15,16 +15,14 @@ public class Cache {
     }
 
     public boolean update(Base model) throws OptimisticException {
-        Base stored = memory.get(model.id());
+
         BiFunction<Integer, Base, Base> increase = (ver, base) -> {
-            ver = stored.version();
-            base = model;
-            if (ver != model.version()) {
+            if (memory.get(model.id()).version() != model.version()) {
                 throw new OptimisticException("Versions are not equal");
             }
-            return new Base(base.id(), base.name(), ver + 1);
+            return new Base(model.id(), model.name(), memory.get(model.id()).version() + 1);
         };
-        return memory.computeIfPresent(stored.id(), increase) != null;
+        return memory.computeIfPresent(model.id(), increase) != null;
     }
 
     public void delete(int id) {
