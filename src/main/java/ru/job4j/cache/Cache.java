@@ -17,7 +17,7 @@ public class Cache {
     public boolean update(Base model) throws OptimisticException {
 
         BiFunction<Integer, Base, Base> increase = (ver, base) -> {
-            if (memory.get(model.id()).version() != model.version()) {
+            if (base.version() != model.version()) {
                 throw new OptimisticException("Versions are not equal");
             }
             return new Base(model.id(), model.name(), memory.get(model.id()).version() + 1);
