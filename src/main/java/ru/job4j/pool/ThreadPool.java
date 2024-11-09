@@ -12,16 +12,20 @@ public class ThreadPool {
     public ThreadPool() {
         int size = Runtime.getRuntime().availableProcessors();
         tasks = new SimpleBlockingQueue<>(size);
-        Runnable target = () -> {
-            try {
-                Runnable task = tasks.poll();
-                task.run();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        };
         for (int i = 0; i < size; i++) {
-            Thread thread = new Thread(target, "Thread_" + i);
+            Thread thread = new Thread(
+                    () -> {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            try {
+                                Runnable task = tasks.poll();
+                                task.run();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                break;
+                            }
+                        }
+                    }
+                    , "Thread_" + i);
             thread.start();
             threads.add(thread);
         }
