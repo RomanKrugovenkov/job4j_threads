@@ -17,11 +17,10 @@ public class ThreadPool {
                     () -> {
                         while (!Thread.currentThread().isInterrupted()) {
                             try {
-                                Runnable task = tasks.poll();
-                                task.run();
+                                tasks.poll().run();
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                break;
+                                Thread.currentThread().interrupt();
+                                throw new RuntimeException(e);
                             }
                         }
                     },
