@@ -19,9 +19,18 @@ public class ParallelArraySearch<T> extends RecursiveTask<Integer> {
         this.to = to;
     }
 
-    private int findIndex(T[] array) {
+    private int findIndex() {
         for (int i = from; i < to; i++) {
-            if (value == array[i]) {
+            if (value.equals(array[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static <T> Integer findIndexInArray(T value, T[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (value.equals(array[i])) {
                 return i;
             }
         }
@@ -31,7 +40,7 @@ public class ParallelArraySearch<T> extends RecursiveTask<Integer> {
     @Override
     protected Integer compute() {
         if ((to - from) <= 10) {
-            return findIndex(array);
+            return findIndex();
         }
         var middle = (from + to) / 2;
         ParallelArraySearch firstArray = new ParallelArraySearch(value, array, from, middle);

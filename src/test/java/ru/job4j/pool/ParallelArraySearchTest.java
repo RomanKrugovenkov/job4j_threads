@@ -21,8 +21,7 @@ class ParallelArraySearchTest {
     @Test
     public void test_find_index_in_small_array() {
         Integer[] array = {1, 2, 3, 4, 5};
-        ParallelArraySearch search = new ParallelArraySearch(3, array, 0, array.length);
-        int result = search.compute();
+        var result = ParallelArraySearch.findIndexInArray(3, array);
         assertEquals(2, result);
     }
 
