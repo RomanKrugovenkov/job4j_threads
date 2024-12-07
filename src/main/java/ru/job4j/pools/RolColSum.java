@@ -56,7 +56,7 @@ public class RolColSum {
         int middle = matrix.length / 2;
         for (int i = 0; i <= middle; i++) {
             futures.put(i, asyncSumI(matrix, i));
-            futures.put(matrix.length -1 - i, asyncSumI(matrix, matrix.length -1 - i));
+            futures.put(matrix.length - 1 - i, asyncSumI(matrix, matrix.length - 1 - i));
         }
         for (Integer key : futures.keySet()) {
             rsl[key] = futures.get(key).get();
